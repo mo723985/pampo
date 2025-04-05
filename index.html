@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>  إدارة باقات اتصالات بامبو  </title>
+ <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <div class="container">
+        <h2>إدارة الباقات  بامبو</h2>
+        <input type="text" id="name" placeholder="اسم الشخص">
+        <input type="number" id="amount" placeholder="المبلغ الشهري">
+        <input type="tel" id="phone" placeholder="رقم الهاتف">
+        <button onclick="addSubscription()">إضافة</button>
+        <table>
+            <thead>
+                <tr>
+                    <th>الاسم</th>
+                    <th>المبلغ</th>
+                    <th>رقم الهاتف</th>
+                    <th>أبريل</th>
+                    <th>مايو</th>
+                    <th>يونيو</th>
+                    <th>يوليو</th>
+                    <th>أغسطس</th>
+                    <th>سبتمبر</th>
+                    <th>أكتوبر</th>
+                    <th>نوفمبر</th>
+                    <th>ديسمبر</th>
+                    <th>تعديل</th>
+                    <th>حذف</th>
+                </tr>
+            </thead>
+            <tbody id="subscriptions"></tbody>
+        </table>
+    </div>
+    <div id="editModal" class="modal hidden">
+        <h3>تعديل المشترك</h3>
+        <input type="text" id="editName">
+        <input type="number" id="editAmount">
+        <input type="tel" id="editPhone">
+        <button onclick="saveEdit()">حفظ</button>
+        <button onclick="closeEditModal()">إلغاء</button>
+    </div>
+    
+    <div id="confirmModal" class="modal hidden">
+        <h3>تأكيد الحذف</h3>
+        <p>هل أنت متأكد من حذف هذا المشترك؟</p>
+        <button id="confirmDelete">نعم</button>
+        <button onclick="closeConfirmModal()">إلغاء</button>
+    </div>
+    
+    <script src="js/main.js">
+       
+    </script>
+</body>
+</html>
