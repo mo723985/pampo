@@ -219,7 +219,7 @@ renderSubscriptions();
 
 
 
-const correctCode = "0000";
+const correctCode = "1997";
 
 // اطلب من المستخدم الرمز
 const userInput = prompt("من فضلك أدخل رمز الدخول:");
