@@ -216,3 +216,20 @@ function deleteSubscription(index) {
 
 
 renderSubscriptions();
+
+
+
+const correctCode = "1234";
+
+// اطلب من المستخدم الرمز
+const userInput = prompt("من فضلك أدخل رمز الدخول:");
+
+// تحقق من الرمز
+if (userInput === correctCode) {
+  alert("تم الدخول بنجاح ✅");
+  // الموقع هيكمل في التحميل عادي
+} else {
+  alert("رمز خاطئ ❌، لا يمكنك الدخول.");
+  // اقفله أو حوله لصفحة تانية
+  window.location.href = "https://www.google.com"; // مثال: تحويل لجوجل
+}
