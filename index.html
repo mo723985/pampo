@@ -1,58 +1,529 @@
 <!DOCTYPE html>
 <html lang="ar">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>  إدارة باقات اتصالات بامبو  </title>
- <link rel="stylesheet" href="css/styles.css">
+  <meta charset="UTF-8">
+  <title>إدارة العملاء</title>
+  <style>
+    body {
+      font-family: 'Cairo', sans-serif;
+      direction: rtl;
+      background: #f0f0f0;
+      padding: 20px;
+      margin: 0;
+    }
+
+    .centered-login {
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .card {
+      background-color: white;
+      padding: 20px;
+      margin-bottom: 20px;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+
+    input, select, button {
+      padding: 10px;
+      margin: 5px;
+      border-radius: 5px;
+      border: 1px solid #ccc;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      border: 1px solid #aaa;
+      padding: 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #00796b;
+      color: white;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f9f9f9;
+    }
+
+    .group-title {
+      background-color: #b2dfdb;
+      font-weight: bold;
+      padding: 10px;
+      margin-top: 30px;
+      border-radius: 5px;
+    }
+
+    .months {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 5px;
+      margin-top: 5px;
+      justify-content: center;
+    }
+
+    .months span {
+      padding: 5px 10px;
+      border: 1px solid #aaa;
+      border-radius: 4px;
+      cursor: pointer;
+      user-select: none;
+      font-size: 13px;
+    }
+
+    .months span.paid {
+      background-color: #4caf50;
+      color: white;
+      border-color: #4caf50;
+    }
+
+    #editBox input, #editBox select {
+      display: block;
+      width: 90%;
+      margin: 10px auto;
+    }
+
+    #editBox button {
+      margin: 5px;
+    }
+  </style>
 </head>
 <body>
-    <div class="container">
-        <h2>إدارة الباقات  بامبو</h2>
-        <input type="text" id="name" placeholder="اسم الشخص">
-        <input type="number" id="amount" placeholder="المبلغ الشهري">
-        <input type="tel" id="phone" placeholder="رقم الهاتف">
-        <button onclick="addSubscription()">إضافة</button>
+
+<div class="centered-login" id="loginArea">
+  <h1 style="margin-bottom: 20px; font-size: 36px; font-weight: bold; color: #222;">
+    <span style="color: #007BFF;">Pampo</span>
+    <span style="margin: 0 20px; color: #ccc;">|</span>
+    <span style="color: #28a745;">Mo Khaled</span>
+  </h1>
+
+  <div id="login" class="card" style="
+    width: 350px;
+    height: 400px;
+    background-image: url('your-image.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    color: white;
+    position: relative;
+    padding: 30px;
+  ">
+
+    <div style="padding-top: 171px;">
+      <h2 style="margin-bottom: 15px;">أدخل كلمة المرور</h2>
+      <input type="password" id="passwordInput" placeholder="كلمة المرور" style="width: 100%; padding: 10px; border-radius: 5px; border: none; margin-bottom: 10px;">
+      <button onclick="checkPassword()" style="width: 100%; padding: 10px; background-color: #00796b; color: white; border: none; border-radius: 5px;">دخول</button>
+      <p id="errorMsg" style="color: #ffcccc; margin-top: 10px;"></p>
+    </div>
+
+  </div>
+</div>
+
+<div id="app" style="display:none;">
+    <button onclick="returnToGroupChoice()" class="back-btn">🔁 رجوع لاختيار المجموعات</button>
+  <div class="card">
+    <h2>إضافة عميل</h2>
+    <input type="text" id="name" placeholder="الاسم">
+    <input type="text" id="phone" placeholder="رقم الهاتف">
+    <input type="number" id="gb" placeholder="عدد الجيجا">
+    <input type="number" id="mins" placeholder="عدد الدقايق">
+    <input type="number" id="amount" placeholder="المبلغ">
+    <select id="payment">
+      <option value="كاش">كاش</option>
+      <option value="يدوي">يدوي</option>
+    </select>
+    <select id="group">
+      <option value="0">المجموعه 1</option>
+      <option value="1"> المجموعه 2</option>
+      <option value="2">المجموعه  3</option>
+      <option value="3"> المجموعه 4</option>
+      <option value="4">المجموعه 5</option>
+      <option value="5">المجموعه 6</option>
+      <option value="6"> المجموعه 7</option>
+      <option value="7">المجموعه 8</option>
+      <option value="8">المجموعه 9</option>
+    </select>
+    <button onclick="addClient()">إضافة</button>
+  </div>
+
+  <div class="card">
+    <h2>بحث عن عميل</h2>
+    <input type="text" id="search" placeholder="الاسم أو الرقم">
+    <button onclick="searchClients()">بحث</button>
+  </div>
+
+  <div id="clientsArea"></div>
+
+  <div id="editBox" class="card" style="display:none;">
+    <h3>تعديل بيانات العميل</h3>
+    <input type="text" id="editName" placeholder="الاسم">
+    <input type="text" id="editPhone" placeholder="رقم الهاتف">
+    <input type="number" id="editGb" placeholder="عدد الجيجا">
+    <input type="number" id="editMins" placeholder="عدد الدقايق">
+    <input type="number" id="editAmount" placeholder="المبلغ">
+    <select id="editPayment">
+      <option value="كاش">كاش</option>
+      <option value="يدوي">يدوي</option>
+    </select>
+    <button onclick="saveEdit()">حفظ التعديل</button>
+    <button onclick="cancelEdit()">إلغاء</button>
+  </div>
+</div>
+
+<script>
+ let groupNames = [
+  "أبو فارس 01204932458",
+  " أبو ياسين  01281320894 ",
+  " أم ادم 01282360532",
+  " أبو فاطمة 01226791209",
+  "أبو محمد خالد 01222513217",
+  "الحاجه 01282385048 ",
+  " د كريم رمضان 01225191337",
+  "  ابو ادم 01277328346",
+  " ابو محمود بدوي 01211934713"
+];
+
+  let groups = JSON.parse(localStorage.getItem("clientData")) || [
+    [
+  { name: "إسلام الليثي", phone: "01102632895", gb: 35, mins: 1500, amount: 300, payment: "كاش" },
+  { name: "مصطفى الليثى", phone: "01121324907", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "سامح الليثي", phone: "01102632896", gb: 30, mins: 1500, amount: 300, payment: "كاش" },
+  { name: "أحمد جمعه", phone: "0157593611", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "أخو أحمد جمعه", phone: "01144529401", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "  عماد حمدي نسيب أحمد جمعه" , phone: "01149991624", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "أحمد عبد الفتاح", phone: "01552290266", gb: 25, mins: 1500, amount: 260, payment: "كاش" }
+
+]
+,
+    [
+  { name: "محمود احمد درویش", phone: "01119170258", gb: 30, mins: 1500, amount: 300, payment: "كاش" },
+  { name: "محمد جابر نصر", phone: "01127151215", gb: 25, mins: 1500, amount: 260, payment: "يدوي" },
+  { name: "حسن تبع اسلام", phone: "01117496710", gb: 35, mins: 1500, amount: 340, payment: "كاش" },
+  { name: "حموده القط", phone: "01151457766", gb: 25, mins: 1500, amount: 260, payment: "يدوي" },
+  { name: "جمال جابر", phone: "01115253734", gb: 25, mins: 2000, amount: 300, payment: "كاش" },
+  { name: "أحمد عادل الجزار", phone: "01142729728", gb: 25, mins: 1500, amount: 260, payment: "يدوي" },
+  { name: "منصور زوج ندى", phone: "01123713251", gb: 30, mins: 2000, amount: 300, payment: "كاش" }
+]
+,
+[
+  { name: "عرفة مشهور", phone: "01140345190", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "أحمد خالد سلطان", phone: "01150398041", gb: 35, mins: 1500, amount: 340, payment: "كاش" },
+  { name: "أحمد قرني تبع اسلام الليثي", phone: "01146865717", gb: 30, mins: 1500, amount: 300, payment: "كاش" },
+  { name: "أبو سيف عمار تبع اسلام الليثي", phone: "01141739519", gb: 35, mins: 1500, amount: 340, payment: "كاش" },
+  { name: "حسن محمود", phone: "01553981029", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: " محمود عبد الستار تبع اسلام الليثي", phone: "01121325520", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "محمد حسین تبع اسلام الليثي", phone: "01113605285", gb: 25, mins: 1500, amount: 260, payment: "كاش" }
+]
+
+,
+[
+  { name: "محمود جابر", phone: "01225191421", gb: 30, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "زوجة محمود جابر", phone: "01282996602", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "زوج أخت محمود جابر", phone: "01143386741", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "أخت محمود جابر", phone: "01285844543", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "أحمد تبع هادی جابر", phone: "01112148509", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "أحمد بدران تبع اسلام الليثي", phone: "01145825318", gb: 40, mins: 1500, amount: 380, payment: "كاش" },
+  { name: "تبع محمود عبدالله", phone: "01146557132", gb: 25, mins: 1500, amount: 260, payment: "كاش" }
+]
+
+ ,
+ [
+  { name: "محمود جيكا", phone: "01149558702", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "الشيخ شعبان", phone: "01141393478", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "عبدو سنترال اهناسيا", phone: "01127141194", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "أبو فريدة تبع اسلام الليثي", phone: "01101496828", gb: 40, mins: 1500, amount: 380, payment: "كاش" },
+  { name: "الشيخ بسام", phone: "01146281518", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "أخو أحمد فرع", phone: "01126812275", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "تبع عرفه مشهور", phone: "01144967985", gb: 20, mins: 1500, amount: 220, payment: "كاش" }
+]
+
+  , 
+  [
+  { name: "علاء علي قطب", phone: "01155754565", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "تبع ناصر بني بخيت", phone: "01152646862", gb: 30, mins: 1500, amount: 300, payment: "كاش" },
+  { name: "تبع محمود عبدالله", phone: "01114075817", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "تبع عبدو سنترال", phone: "01156232200", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "محمد رمضان تبع اسلام الليثي", phone: "01141876179", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "رجب محمد", phone: "01141149182", gb: 14, mins: 1500, amount: 200, payment: "كاش" },
+  { name: "عبد الرحمن تبعد", phone: "01153752531", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "اسلام المحمدی تبع هادي", phone: "01140277971", gb: 35, mins: 1500, amount: 340, payment: "كاش" }
+]
+
+  ,
+   [
+  { name: "محمد جمیل تبع هادی", phone: "01150708741", gb: 30, mins: 1500, amount: 300, payment: "كاش" },
+  { name: "زياد بيتك تبع هادي", phone: "01144849012", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "البيت اسلام الليثي", phone: "01104918548", gb: 20, mins: 1500, amount: 220, payment: "كاش" },
+  { name: "البيت مصطفى الليثي", phone: "01144253033", gb: 20, mins: 1500, amount: 220, payment: "كاش" },
+  { name: "تبع حسن تبع اسلام الليثي", phone: "01122947502", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "أبو ادم رمضان", phone: "01151857373", gb: 30, mins: 1500, amount: 300, payment: "كاش" },
+  { name: "أم كريم مرات رمضان", phone: "01142731090", gb: 30, mins: 1500, amount: 300, payment: "كاش" }
+]
+
+   , 
+  [
+  { name: "حمدي العريض", phone: "01148740065", gb: 30, mins: 1500, amount: 300, payment: "كاش" },
+  { name: "تبع حمدي العريض", phone: "01104187258", gb: 30, mins: 1500, amount: 300, payment: "كاش" },
+  { name: "أيمن اسامه تبع اسلام الليثي", phone: "01100480712", gb: 30, mins: 1500, amount: 300, payment: "كاش" },
+  { name: "تبع الشيخ بسام", phone: "01125531742", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "خطيبة سامح الليثي", phone: "01114220574", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "كريم ربيع نقاش شاويش", phone: "01289637377", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "احمد سعد علي", phone: "01124504911", gb: 25, mins: 1500, amount: 260, payment: "كاش" }
+]
+
+   ,
+ [
+  { name: "تبع ابو فريده اسلام الليثي", phone: "01120737674", gb: 20, mins: 1500, amount: 220, payment: "كاش" },
+  { name: "الحزين تبع اسلام الليثي", phone: "01007820519", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "ابو شروق تبع اسلام الليثي", phone: "01118870875", gb: 35, mins: 1500, amount: 340, payment: "كاش" },
+  { name: "ولید محجوبه", phone: "01142520529", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "محمد سيد تبع الشيخ بسام", phone: "01123199045", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "احمد الحصان تبع الشيخ بسام", phone: "01124754900", gb: 25, mins: 1500, amount: 260, payment: "كاش" },
+  { name: "محمود عبد الله", phone: "01551079141", gb: 25, mins: 1500, amount: 260, payment: "كاش" }
+]
+
+  ];
+
+  let editGroupIndex = null;
+  let editClientIndex = null;
+
+  function checkPassword() {
+    let input = document.getElementById('passwordInput').value;
+    if (input === '1997') {
+      document.getElementById('loginArea').style.display = 'none';
+
+// إظهار اختيار المجموعة بعد كلمة السر
+let choiceBox = document.createElement('div');
+choiceBox.id = 'groupSelector';
+choiceBox.style = "text-align:center; margin-top: 20px";
+
+choiceBox.innerHTML = `
+  <h2>اختر المجموعة</h2>
+  <select id='groupChoice' style='padding:10px; font-size:16px'>
+    <option value='all'>كل المجاميع</option>
+    ${groupNames.map((name, i) => `<option value='${i}'>${name}</option>`).join('')}
+  </select>
+  <br><br>
+  <button onclick='openSelectedGroup()' style='padding:10px 20px; font-size:16px;'>فتح</button>
+`;
+function returnToGroupChoice() {
+  document.getElementById('app').style.display = 'none';
+  showGroupChoice(); // دي اللي بتعرض شاشة اختيار المجموعة
+}
+function showGroupChoice() {
+  const choiceBox = document.createElement('div');
+  choiceBox.id = "groupSelector";
+  choiceBox.style = "text-align:center; margin-top: 20px;";
+
+  choiceBox.innerHTML = `
+    <img src="my-photo.jpg" alt="صورتك" style="width:120px; height:120px; border-radius:50%; margin-bottom:15px;">
+    <h2>اختر المجموعة</h2>
+    <select id='groupChoice' style='padding:10px; font-size:16px'>
+      <option value='all'>كل المجاميع</option>
+      ${groupNames.map((name, i) => `<option value='${i}'>${name}</option>`).join('')}
+    </select>
+    <br><br>
+    <button onclick='openSelectedGroup()' style='padding:10px 20px; font-size:16px;'>فتح</button>
+  `;
+  document.body.appendChild(choiceBox);
+}
+
+
+
+document.body.appendChild(choiceBox);
+
+    } else {
+      document.getElementById('errorMsg').innerText = 'كلمة المرور غير صحيحة!';
+    }
+  }
+
+  function addClient() {
+    let name = document.getElementById('name').value;
+    let phone = document.getElementById('phone').value;
+    let gb = parseFloat(document.getElementById('gb').value);
+    let mins = parseFloat(document.getElementById('mins').value);
+    let amount = parseFloat(document.getElementById('amount').value);
+    let payment = document.getElementById('payment').value;
+    let group = document.getElementById('group').value;
+
+    if (!name || !phone) return alert('الاسم ورقم الهاتف مطلوبين');
+    if (groups[group].length >= 8) return alert('هذه المجموعة ممتلئة');
+
+    groups[group].push({ name, phone, gb, mins, amount, payment });
+    localStorage.setItem("clientData", JSON.stringify(groups));
+    renderClients();
+
+    document.getElementById('name').value = '';
+    document.getElementById('phone').value = '';
+    document.getElementById('gb').value = '';
+    document.getElementById('mins').value = '';
+    document.getElementById('amount').value = '';
+  }
+
+  function renderClients(filtered = null) {
+    let data = filtered || groups;
+    let area = document.getElementById('clientsArea');
+    area.innerHTML = '';
+
+    data.forEach((group, i) => {
+      if (group.length > 0) {
+        let totalGb = 0, totalMins = 0, totalAmount = 0;
+
+        group.forEach(c => {
+          totalGb += Number(c.gb);
+          totalMins += Number(c.mins);
+          totalAmount += Number(c.amount);
+        });
+
+        area.innerHTML += `<div class='group-title'>${groupNames[i]}</div>`;
+        let html = `
         <table>
-            <thead>
-                <tr>
-                    <th>الاسم</th>
-                    <th>المبلغ</th>
-                    <th>رقم الهاتف</th>
-                    <th>أبريل</th>
-                    <th>مايو</th>
-                    <th>يونيو</th>
-                    <th>يوليو</th>
-                    <th>أغسطس</th>
-                    <th>سبتمبر</th>
-                    <th>أكتوبر</th>
-                    <th>نوفمبر</th>
-                    <th>ديسمبر</th>
-                    <th>تعديل</th>
-                    <th>حذف</th>
-                </tr>
-            </thead>
-            <tbody id="subscriptions"></tbody>
-        </table>
-    </div>
-    <div id="editModal" class="modal hidden">
-        <h3>تعديل المشترك</h3>
-        <input type="text" id="editName">
-        <input type="number" id="editAmount">
-        <input type="tel" id="editPhone">
-        <button onclick="saveEdit()">حفظ</button>
-        <button onclick="closeEditModal()">إلغاء</button>
-    </div>
-    
-    <div id="confirmModal" class="modal hidden">
-        <h3>تأكيد الحذف</h3>
-        <p>هل أنت متأكد من حذف هذا المشترك؟</p>
-        <button id="confirmDelete">نعم</button>
-        <button onclick="closeConfirmModal()">إلغاء</button>
-    </div>
-    
-    <script src="js/main.js">
-       
-    </script>
+          <tr>
+            <th>الاسم</th>
+            <th>الهاتف</th>
+            <th>الجيجا</th>
+            <th>الدقايق</th>
+            <th>المبلغ</th>
+            <th>الدفع</th>
+            <th>تعديل</th>
+          </tr>`;
+        group.forEach((c, index) => {
+          html += `
+          <tr>
+            <td>${c.name}</td>
+            <td><a href="tel:${c.phone}">${c.phone}</a></td>
+            <td>${c.gb}</td>
+            <td>${c.mins}</td>
+            <td>${c.amount}</td>
+            <td>${c.payment}</td>
+            <td><button onclick="editClient(${i}, ${index})">تعديل</button></td>
+          </tr>
+          <tr>
+            <td colspan="7">
+              <div class="months">
+                ${['يناير','فبراير','مارس','أبريل','مايو','يونيو','يوليو','أغسطس','سبتمبر','أكتوبر','نوفمبر','ديسمبر'].map(m => `<span onclick="toggleMonth(this)">${m}</span>`).join('')}
+              </div>
+            </td>
+          </tr>`;
+        });
+
+        html += `
+        <tr style="font-weight:bold; background:#eee">
+          <td colspan="2">الإجمالي</td>
+          <td>${totalGb}</td>
+          <td>${totalMins}</td>
+          <td>${totalAmount}</td>
+          <td colspan="2"></td>
+        </tr>`;
+
+        html += `</table>`;
+        area.innerHTML += html;
+      }
+    });
+  }
+
+  function editClient(groupIndex, clientIndex) {
+    const c = groups[groupIndex][clientIndex];
+    editGroupIndex = groupIndex;
+    editClientIndex = clientIndex;
+
+    document.getElementById('editName').value = c.name;
+    document.getElementById('editPhone').value = c.phone;
+    document.getElementById('editGb').value = c.gb;
+    document.getElementById('editMins').value = c.mins;
+    document.getElementById('editAmount').value = c.amount;
+    document.getElementById('editPayment').value = c.payment;
+
+    document.getElementById('editBox').style.display = 'block';
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  function saveEdit() {
+    let c = groups[editGroupIndex][editClientIndex];
+    c.name = document.getElementById('editName').value;
+    c.phone = document.getElementById('editPhone').value;
+    c.gb = document.getElementById('editGb').value;
+    c.mins = document.getElementById('editMins').value;
+    c.amount = document.getElementById('editAmount').value;
+    c.payment = document.getElementById('editPayment').value;
+
+    localStorage.setItem("clientData", JSON.stringify(groups));
+    renderClients();
+    document.getElementById('editBox').style.display = 'none';
+  }
+
+  function cancelEdit() {
+    document.getElementById('editBox').style.display = 'none';
+  }
+
+  function searchClients() {
+    let key = document.getElementById('search').value.toLowerCase();
+    if (!key) return renderClients();
+
+    let filtered = groups.map(group =>
+      group.filter(c => c.name.toLowerCase().includes(key) || c.phone.includes(key))
+    );
+
+    renderClients(filtered);
+  }
+
+  function toggleMonth(el) {
+    el.classList.toggle('paid');
+    localStorage.setItem("clientData", JSON.stringify(groups));
+  }
+  function openSelectedGroup() {
+  let val = document.getElementById('groupChoice').value;
+  document.getElementById('app').style.display = 'block';
+  document.getElementById('groupSelector')?.remove(); // يشيل الاختيار بعد الفتح
+  document.querySelector('h1')?.remove(); // يشيل العنوان لو فيه
+  if (val === 'all') {
+    renderClients();
+  } else {
+    let filtered = groups.map((g, i) => i == val ? g : []);
+    renderClients(filtered);
+  }
+}
+function returnToGroupChoice() {
+  // إخفاء المحتوى الحالي
+  document.getElementById('app').style.display = 'none';
+
+  // حذف المحتوى القديم لو موجود
+  const oldChoice = document.getElementById('groupSelector');
+  if (oldChoice) oldChoice.remove();
+
+  // عرض اختيارات المجموعات تاني
+  showGroupChoice();
+}
+function showGroupChoice() {
+  const choiceBox = document.createElement('div');
+  choiceBox.id = "groupSelector";
+  choiceBox.style = "text-align:center; margin-top: 20px;";
+
+  choiceBox.innerHTML = `
+    <img src="your-image.jpg" alt="صورتك" style="width:120px; height:120px; border-radius:50%; margin-bottom:15px;">
+    <h2>اختر المجموعة</h2>
+    <select id='groupChoice' style='padding:10px; font-size:16px'>
+      <option value='all'>كل المجاميع</option>
+      ${groupNames.map((name, i) => `<option value='${i}'>${name}</option>`).join('')}
+    </select>
+    <br><br>
+    <button onclick='openSelectedGroup()' style='padding:10px 20px; font-size:16px;'>فتح</button>
+  `;
+  document.body.appendChild(choiceBox);
+}
+
+</script>
+
 </body>
 </html>
