@@ -4,98 +4,193 @@
   <meta charset="UTF-8">
   <title>إدارة العملاء</title>
   <style>
-    body {
-      font-family: 'Cairo', sans-serif;
-      direction: rtl;
-      background: #f0f0f0;
-      padding: 20px;
-      margin: 0;
-    }
+body {
+  font-family: 'Cairo', sans-serif;
+  direction: rtl;
+  background: #f0f0f0;
+  padding: 0;
+  margin: 0;
+  font-size: 20px; /* تكبير الخط الأساسي */
+}
 
-    .centered-login {
-      height: 100vh;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
+.centered-login {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+}
 
-    .card {
-      background-color: white;
-      padding: 20px;
-      margin-bottom: 20px;
-      border-radius: 10px;
-      box-shadow: 0 0 10px rgba(0,0,0,0.1);
-    }
+.card {
+  background-color: white;
+  padding: 50px;
+  margin-bottom: 20px;
+  border-radius: 15px;
+  box-shadow: 0 0 20px rgba(0,0,0,0.1);
+  width: 100%;
+  max-width: 500px;
+  text-align: center;
+}
 
-    input, select, button {
-      padding: 10px;
-      margin: 5px;
-      border-radius: 5px;
-      border: 1px solid #ccc;
-    }
+.card h2 {
+  font-size: 30px;
+  margin-bottom: 30px;
+}
 
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
+input, select, button {
+  padding: 20px;
+  margin: 12px 0;
+  border-radius: 10px;
+  border: 1px solid #ccc;
+  font-size: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
 
-    th, td {
-      border: 1px solid #aaa;
-      padding: 10px;
-      text-align: center;
-    }
+input:focus, select:focus {
+  outline: none;
+  border-color: #00796b;
+  box-shadow: 0 0 5px #00796b55;
+}
 
-    th {
-      background-color: #00796b;
-      color: white;
-    }
+button {
+  background-color: #00796b;
+  color: white;
+  border: none;
+  transition: background-color 0.3s ease;
+  cursor: pointer;
+  font-size: 22px;
+}
 
-    tr:nth-child(even) {
-      background-color: #f9f9f9;
-    }
+button:hover {
+  background-color: #004d40;
+}
 
-    .group-title {
-      background-color: #b2dfdb;
-      font-weight: bold;
-      padding: 10px;
-      margin-top: 30px;
-      border-radius: 5px;
-    }
+table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
 
-    .months {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 5px;
-      justify-content: center;
-    }
+th, td {
+  border: 1px solid #aaa;
+  padding: 18px;
+  text-align: center;
+  font-size: 18px;
+}
 
-    .months span {
-      padding: 5px 10px;
-      border: 1px solid #aaa;
-      border-radius: 4px;
-      cursor: pointer;
-      user-select: none;
-      font-size: 13px;
-    }
+th {
+  background-color: #00796b;
+  color: white;
+  font-size: 20px;
+}
 
-    .months span.paid {
-      background-color: #4caf50;
-      color: white;
-      border-color: #4caf50;
-    }
+tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
 
-    #editBox input, #editBox select {
-      display: block;
-      width: 90%;
-      margin: 10px auto;
-    }
+.group-title {
+  background-color: #b2dfdb;
+  font-weight: bold;
+  padding: 15px;
+  margin-top: 30px;
+  border-radius: 8px;
+  text-align: center;
+  font-size: 22px;
+}
 
-    #editBox button {
-      margin: 5px;
-    }
+.months {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 10px;
+  justify-content: center;
+}
+
+.months span {
+  padding: 10px 15px;
+  border: 1px solid #aaa;
+  border-radius: 6px;
+  cursor: pointer;
+  user-select: none;
+  font-size: 18px;
+}
+
+.months span.paid {
+  background-color: #4caf50;
+  color: white;
+  border-color: #4caf50;
+}
+
+#editBox input, #editBox select {
+  display: block;
+  width: 90%;
+  margin: 15px auto;
+  font-size: 20px;
+}
+
+#editBox button {
+  margin: 10px;
+  font-size: 20px;
+  padding: 15px 25px;
+}
+
+#errorMsg {
+  color: red;
+  margin-top: 20px;
+  font-size: 18px;
+}
+.group-selector {
+  text-align: center;
+  margin-top: 40px;
+  background: white;
+  padding: 30px;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  width: 90%;
+  max-width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.profile-image {
+  width: 130px;
+  height: 130px;
+  border-radius: 50%;
+  margin-bottom: 20px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.2);
+  object-fit: cover;
+}
+
+.group-title-text {
+  font-size: 26px;
+  margin-bottom: 20px;
+}
+
+.group-select {
+  padding: 15px;
+  font-size: 18px;
+  width: 100%;
+  border-radius: 8px;
+  border: 1px solid #ccc;
+}
+
+.group-button {
+  padding: 15px 30px;
+  font-size: 18px;
+  background-color: #00796b;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+.group-button:hover {
+  background-color: #004d40;
+}
+
   </style>
 </head>
 <body>
