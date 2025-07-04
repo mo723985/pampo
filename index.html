@@ -212,42 +212,6 @@ tr:nth-child(even) {
     font-size: 16px;
   }
 }
-.card {
-  width: 95%;
-  max-width: 400px;
-  padding: 30px;
-  border-radius: 15px;
-  background-color: white;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  margin: 20px auto;
-}
-
-.card input[type="password"],
-.card button {
-  width: 100%;
-  padding: 18px;
-  font-size: 22px;
-  margin: 10px 0;
-  border-radius: 10px;
-  border: 1px solid #ccc;
-  box-sizing: border-box;
-}
-
-.card button {
-  background-color: #00796b;
-  color: white;
-  border: none;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.card button:hover {
-  background-color: #004d40;
-}
-.card * {
-  font-size: 22px;
-}
 
   </style>
 </head>
@@ -260,21 +224,44 @@ tr:nth-child(even) {
     <span style="color: #28a745;">Mo Khaled</span>
   </h1>
 
-<div id="login" class="card" style="
-  width: 95%;
-  max-width: 400px;
-  padding: 30px;
-  background-color: white;
-  background-image: url('your-image.jpg');
-  background-size: cover;
-  background-position: center;
-  border-radius: 15px;
-  box-shadow: 0 0 15px rgba(0,0,0,0.3);
-  color: white;
-  position: relative;
-  text-align: center;
-">
-
+  <div id="login" class="card" style="
+    width: 90%;
+    max-width: 400px;
+    height: auto;
+    background-image: url('your-image.jpg');
+    background-size: cover;
+    background-position: center;
+    border-radius: 15px;
+    box-shadow: 0 0 15px rgba(0,0,0,0.3);
+    color: white;
+    position: relative;
+    padding: 30px;
+    text-align: center;
+  ">
+    <div style="padding-top: 150px;">
+      <h2 style="margin-bottom: 20px; font-size: 28px;">أدخل كلمة المرور</h2>
+      <input type="password" id="passwordInput" placeholder="كلمة المرور" style="
+        width: 100%;
+        padding: 18px;
+        font-size: 22px;
+        border-radius: 10px;
+        border: none;
+        margin-bottom: 15px;
+        box-sizing: border-box;
+      ">
+      <button onclick="checkPassword()" style="
+        width: 100%;
+        padding: 18px;
+        background-color: #00796b;
+        color: white;
+        border: none;
+        border-radius: 10px;
+        font-size: 22px;
+        cursor: pointer;
+      ">دخول</button>
+      <p id="errorMsg" style="color: #ffcccc; margin-top: 15px; font-size: 18px;"></p>
+    </div>
+  </div>
 </div>
 
 <div id="app" style="display:none;">
